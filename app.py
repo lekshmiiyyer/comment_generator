@@ -1,9 +1,4 @@
-import nltk
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from textblob import TextBlob
-import spacy
-from spacy.lang.en.stop_words import STOP_WORDS
-import random
+
 from flask import Flask, request, jsonify
 from comment import generate_comments
 
@@ -17,4 +12,4 @@ def generate_comments_route():
     return jsonify(comments)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
