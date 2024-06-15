@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comment Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        #comments {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Comment Generator</h2>
+        <textarea id="inputText" placeholder="Enter your text here..."></textarea>
+        <button onclick="generateComments()">Generate Comments</button>
+        <div id="comments"></div>
+    </div>
+
+    <script>
+        function generateComments() {
+            var inputText = document.getElementById("inputText").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/generate-comments", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var comments = JSON.parse(xhr.responseText);
+                    displayComments(comments);
+                }
+            };
+            xhr.send(JSON.stringify({text: inputText}));
+        }
+
+        function displayComments(comments) {
+            var commentsDiv = document.getElementById("comments");
+            commentsDiv.innerHTML = "";
+            for (var type in comments) {
+                var comment = comments[type];
+                var commentElement = document.createElement("p");
+                commentElement.textContent = type + ": " + comment;
+                commentsDiv.appendChild(commentElement);
+            }
+        }
+    </script>
+</body>
+</html>
