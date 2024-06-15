@@ -38,19 +38,23 @@
         <div id="comments"></div>
     </div>
 
-    <script>
+    <<script>
         function generateComments() {
             var inputText = document.getElementById("inputText").value;
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/generate-comments", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var comments = JSON.parse(xhr.responseText);
-                    displayComments(comments);
-                }
-            };
-            xhr.send(JSON.stringify({text: inputText}));
+            fetch('/generate_comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: inputText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayComments(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
 
         function displayComments(comments) {
